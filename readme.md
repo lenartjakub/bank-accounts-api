@@ -20,7 +20,7 @@
   ```
 * When we are inside our app, we can runn our dependencies:
   ```
-  make env && make env-test && make init
+  make init
   ```
 
 ### For testing the app we can use created bank account and wallet ###

@@ -9,12 +9,6 @@ down:
 
 restart: down up
 
-env:
-	cp .env.example .env
-
-env-test:
-	cp .env.test .env.test.local
-
 init:
 	composer install && bin/console d:m:migrate --no-interaction && bin/console d:fixtures:load --no-interaction
 
