@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+  app:
+    container_name: bank_account_api
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+    command: /bin/bash -c "composer install --no-interaction --prefer-dist && nginx && php-fpm"
+
+  mysql:
+    image: mysql:8.0
+    container_name: bank_accounts_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: head
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/conf:/etc/mysql/conf.d
