@@ -6,6 +6,6 @@ namespace App\Exception;
 
 use Exception;
 
-class NoFundsException extends Exception
+class NoSufficientFundsException extends Exception
 {
 }

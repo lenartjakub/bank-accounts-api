@@ -10,6 +10,7 @@ use App\DTO\WithdrawDTO;
 use App\Enum\WalletEventType;
 use App\Exception\BadParamRequestException;
 use App\Exception\BankAccountNotFoundException;
+use App\Exception\NoSufficientFundsException;
 use App\Exception\UnsupportedFileTypeException;
 use App\Exception\WalletNotFoundException;
 use App\Service\History\WalletHistoryServiceInterface;
@@ -108,7 +109,7 @@ class WalletController extends ApiController
             return $this->jsonMessage("Amount has been withdraw from wallet.");
         } catch (BadParamRequestException $exception) {
             return $this->jsonError($exception->getMessages());
-        } catch (WalletNotFoundException $exception) {
+        } catch (WalletNotFoundException|NoSufficientFundsException $exception) {
             return $this->jsonError($exception->getMessage(), Response::HTTP_NOT_FOUND);
         } catch (Exception $exception) {
             return $this->jsonError($exception->getMessage());

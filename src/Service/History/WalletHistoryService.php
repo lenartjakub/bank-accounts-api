@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\History;
 
 use App\DTO\WalletHistoryDTO;
 use App\Enum\WalletEventType;
-use App\Exception\NoFundsException;
+use App\Exception\NoSufficientFundsException;
 use App\Exception\WalletNotFoundException;
 use App\Repository\Interfaces\WalletRepositoryInterface;
 use App\Validator\DTO\WalletHistoryDTOValidatorInterface;
@@ -41,7 +43,7 @@ class WalletHistoryService implements WalletHistoryServiceInterface
         $walletEvents = $wallet->getWalletEvents();
 
         if ($this->hasOnlyInitialEvent($walletEvents)) {
-            throw new NoFundsException("History doesn't exists. Probably your wallet is empty.");
+            throw new NoSufficientFundsException("History doesn't exists. Probably your wallet is empty.");
         }
 
         $fileGenerator = $this->historyFactory->make($fileType, $walletEvents);

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\Service;
 
+use App\Entity\Wallet;
+use App\Entity\WalletEvents;
 use App\Exception\WalletNotFoundException;
 use App\Repository\Interfaces\WalletRepositoryInterface;
 use App\Service\Wallet\Show\ShowWalletService;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class ShowWalletServiceTest extends TestCase
@@ -19,7 +22,7 @@ class ShowWalletServiceTest extends TestCase
         parent::setUp();
 
         $this->walletRepository = $this->createMock(WalletRepositoryInterface::class);
-
+        $this->walletEvents = $this->createMock(WalletEvents::class);
         $this->showWalletService = new ShowWalletService($this->walletRepository);
     }
 
@@ -30,16 +33,12 @@ class ShowWalletServiceTest extends TestCase
     {
         $this->walletRepository->expects($this->once())
             ->method('findByIban')
-            ->willReturn([
-                "iban" => "PL33416704205505834192975507",
-                "balance" => 67868757,
-                "currency" => "EUR"
-            ]);
+            ->willReturn($this->exampleWallet());
 
         $wallet = $this->showWalletService->show('PL33416704205505834192975507');
 
-        self::assertNotNull($wallet);
         self::assertIsArray($wallet);
+        self::assertEquals($this->expectedValues(), $wallet);
     }
 
     /**
@@ -54,5 +53,27 @@ class ShowWalletServiceTest extends TestCase
         $this->expectException(WalletNotFoundException::class);
 
         $this->showWalletService->show('PL33416704205505834192975507');
+    }
+
+    private function exampleWallet(): Wallet
+    {
+        $date = new DateTime('now');
+
+        $wallet = new Wallet();
+        $wallet->setIban('PL33416704205505834192975507');
+        $wallet->setCurrency('EUR');
+        $wallet->setCreatedAt($date);
+        $wallet->setUpdatedAt($date);
+
+        return $wallet;
+    }
+
+    private function expectedValues(): array
+    {
+        return [
+            "iban" => "PL33416704205505834192975507",
+            "balance" => 0.0,
+            "currency" => "EUR",
+        ];
     }
 }

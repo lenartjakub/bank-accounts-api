@@ -77,6 +77,11 @@ class Wallet
         $this->iban = $iban;
     }
 
+    public function setWalletEvents(Collection $events)
+    {
+        $this->walletEvents = $events;
+    }
+
     public function getWalletEvents(): Collection
     {
         return $this->walletEvents;
