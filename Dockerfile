@@ -22,6 +22,8 @@ RUN mkdir -p $PROJECT_PATH
 
 COPY . /app
 
+RUN cp .env.example .env
+
 RUN composer install
 
 COPY ./entrypoint.sh /entrypoint.sh
