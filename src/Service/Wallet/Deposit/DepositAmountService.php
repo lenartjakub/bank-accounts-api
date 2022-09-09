@@ -17,6 +17,6 @@ class DepositAmountService extends AbstractWalletOperationService
 
         $this->isWalletExists($wallet);
 
-        $this->addEvent($wallet, $walletOperationDTO, WalletEventType::Deposit);
+        $this->addEvent($wallet, $walletOperationDTO, WalletEventType::DEPOSIT);
     }
 }

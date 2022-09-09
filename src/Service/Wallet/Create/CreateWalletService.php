@@ -70,7 +70,7 @@ class CreateWalletService implements CreateWalletServiceInterface
     {
         $walletEvent = new WalletEvents();
         $walletEvent->setAmount(0);
-        $walletEvent->setType(WalletEventType::Initial);
+        $walletEvent->setType(WalletEventType::INITIAL);
         $walletEvent->setWallet($wallet);
 
         return $walletEvent;

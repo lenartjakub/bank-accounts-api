@@ -7,11 +7,18 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController
 {
     private SerializerInterface $serializer;
+
+    #[Route(path: 'health-check', name: 'health_check', methods: 'GET')]
+    public function healthCheck(): JsonResponse
+    {
+        return new JsonResponse(Response::$statusTexts[Response::HTTP_OK], Response::HTTP_OK);
+    }
 
     public function __construct(SerializerInterface $serializer)
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dictionary\ApiMessageResponse;
 use App\DTO\DepositDTO;
 use App\DTO\WalletDTO;
 use App\DTO\WithdrawDTO;
@@ -21,6 +22,7 @@ use DateTime;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -49,7 +51,7 @@ class WalletController extends ApiController
         $this->walletHistoryService = $walletHistoryService;
     }
 
-    #[Route(path: 'wallet/{iban}', name: 'show_wallet', methods: 'GET')]
+    #[Route(path: 'wallet/{iban}', name: 'show_wallet', methods: Request::METHOD_GET)]
     public function show(string $iban): JsonResponse
     {
         try {
@@ -61,14 +63,14 @@ class WalletController extends ApiController
         }
     }
 
-    #[Route(path: 'wallet', name: 'create_wallet', methods: 'POST')]
+    #[Route(path: 'wallet', name: 'create_wallet', methods: Request::METHOD_POST)]
     #[ParamConverter('walletDTO', converter: "fos_rest.request_body")]
     public function create(WalletDTO $walletDTO): JsonResponse
     {
         try {
             $this->createWalletService->handle($walletDTO);
 
-            return $this->jsonMessage("The wallet has been successfully created.");
+            return $this->jsonMessage(ApiMessageResponse::WALLET_CREATED);
         } catch (BadParamRequestException $exception) {
             return $this->jsonError($exception->getMessages());
         } catch (BankAccountNotFoundException $exception) {
@@ -78,16 +80,16 @@ class WalletController extends ApiController
         }
     }
 
-    #[Route(path: 'wallet/deposit', name: 'deposit_wallet', methods: 'POST')]
+    #[Route(path: 'wallet/deposit', name: 'deposit_wallet', methods: Request::METHOD_POST)]
     #[ParamConverter('depositDTO', converter: "fos_rest.request_body")]
     public function deposit(DepositDTO $depositDTO): JsonResponse
     {
         try {
             $this->operationServiceFactory
-                ->make(WalletEventType::Deposit)
+                ->make(WalletEventType::DEPOSIT)
                 ->handle($depositDTO);
 
-            return $this->jsonMessage("Amount has been deposit to wallet.");
+            return $this->jsonMessage(ApiMessageResponse::AMOUNT_DEPOSITED);
         } catch (BadParamRequestException $exception) {
             return $this->jsonError($exception->getMessages());
         } catch (WalletNotFoundException $exception) {
@@ -97,16 +99,16 @@ class WalletController extends ApiController
         }
     }
 
-    #[Route(path: 'wallet/withdraw', name: 'withdraw_wallet', methods: 'POST')]
+    #[Route(path: 'wallet/withdraw', name: 'withdraw_wallet', methods: Request::METHOD_POST)]
     #[ParamConverter('withdrawDTO', converter: "fos_rest.request_body")]
     public function withdraw(WithdrawDTO $withdrawDTO): JsonResponse
     {
         try {
             $this->operationServiceFactory
-                ->make(WalletEventType::Withdraw)
+                ->make(WalletEventType::WITHDRAW)
                 ->handle($withdrawDTO);
 
-            return $this->jsonMessage("Amount has been withdraw from wallet.");
+            return $this->jsonMessage(ApiMessageResponse::AMOUNT_WITHDRAWN);
         } catch (BadParamRequestException $exception) {
             return $this->jsonError($exception->getMessages());
         } catch (WalletNotFoundException|NoSufficientFundsException $exception) {
@@ -116,7 +118,7 @@ class WalletController extends ApiController
         }
     }
 
-    #[Route(path: 'wallet/{iban}/history/{fileType}', name: 'history_wallet', methods: 'GET')]
+    #[Route(path: 'wallet/{iban}/history/{fileType}', name: 'history_wallet', methods: Request::METHOD_GET)]
     public function generateHistory(string $iban, string $fileType): Response|JsonResponse
     {
         try {

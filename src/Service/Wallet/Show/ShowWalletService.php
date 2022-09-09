@@ -6,7 +6,7 @@ namespace App\Service\Wallet\Show;
 
 use App\Exception\WalletNotFoundException;
 use App\Repository\Interfaces\WalletRepositoryInterface;
-use App\Service\Balance\BalanceGenerator;
+use App\Service\Balance\BalanceCalculator;
 
 class ShowWalletService implements ShowWalletServiceInterface
 {
@@ -27,7 +27,7 @@ class ShowWalletService implements ShowWalletServiceInterface
 
         return [
             'iban' => $iban,
-            'balance' => BalanceGenerator::generate($wallet->getWalletEvents()),
+            'balance' => BalanceCalculator::calculate($wallet->getWalletEvents()),
             'currency' => $wallet->getCurrency()
         ];
     }

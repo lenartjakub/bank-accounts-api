@@ -6,7 +6,7 @@ namespace App\Enum;
 
 enum WalletEventType: string
 {
-    case Withdraw = 'WITHDRAW';
-    case Deposit = 'DEPOSIT';
-    case Initial = 'INITIAL';
+    case WITHDRAW = 'WITHDRAW';
+    case DEPOSIT = 'DEPOSIT';
+    case INITIAL = 'INITIAL';
 }

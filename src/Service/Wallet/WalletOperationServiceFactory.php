@@ -35,12 +35,12 @@ class WalletOperationServiceFactory
     public function make(WalletEventType $eventType): AbstractWalletOperationService
     {
         return match ($eventType) {
-            WalletEventType::Deposit => new DepositAmountService(
+            WalletEventType::DEPOSIT => new DepositAmountService(
                 $this->operationDTOValidator,
                 $this->walletRepository,
                 $this->walletEventsRepository
             ),
-            WalletEventType::Withdraw => new WithdrawAmountService(
+            WalletEventType::WITHDRAW => new WithdrawAmountService(
                 $this->operationDTOValidator,
                 $this->walletRepository,
                 $this->walletEventsRepository

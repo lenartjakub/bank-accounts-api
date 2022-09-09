@@ -53,6 +53,6 @@ class WalletHistoryService implements WalletHistoryServiceInterface
 
     private function hasOnlyInitialEvent(Collection $events): bool
     {
-        return $events->count() === 1 && $events->first()->getType() === WalletEventType::Initial;
+        return $events->count() === 1 && $events->first()->getType() === WalletEventType::INITIAL;
     }
 }

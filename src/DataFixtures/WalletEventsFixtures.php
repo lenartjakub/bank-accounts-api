@@ -17,7 +17,7 @@ class WalletEventsFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 5; $i++) {
             $event = new WalletEvents();
             $event->setWallet($this->getReference(WalletsFixtures::WALLET_REFERENCE));
-            $event->setType(WalletEventType::Deposit);
+            $event->setType(WalletEventType::DEPOSIT);
             $event->setAmount(10000);
 
             $manager->persist($event);
