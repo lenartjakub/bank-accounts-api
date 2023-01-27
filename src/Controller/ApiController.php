@@ -12,17 +12,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController
 {
-    private SerializerInterface $serializer;
+    public function __construct(private readonly SerializerInterface $serializer)
+    {
+    }
 
     #[Route(path: 'health-check', name: 'health_check', methods: 'GET')]
     public function healthCheck(): JsonResponse
     {
         return new JsonResponse(Response::$statusTexts[Response::HTTP_OK], Response::HTTP_OK);
-    }
-
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
     }
 
     public function jsonMessage($message = '', $status = Response::HTTP_CREATED): JsonResponse
