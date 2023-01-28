@@ -4,7 +4,7 @@ ENV PROJECT_PATH /app
 
 WORKDIR /app
 
-RUN apk add --update libzip-dev oniguruma-dev nginx openssl-dev icu icu-libs icu-dev bash git curl netcat-openbsd g++ zip make \
+RUN apk add --update libzip-dev oniguruma-dev nginx openssl-dev icu icu-libs icu-dev bash git curl netcat-openbsd g++ zip autoconf linux-headers make \
     && docker-php-ext-install zip mbstring intl \
     && docker-php-ext-install pdo pdo_mysql
 
@@ -23,6 +23,10 @@ RUN mkdir -p $PROJECT_PATH
 COPY . /app
 
 RUN composer install
+
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+RUN echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
 
 COPY ./entrypoint.sh /entrypoint.sh
 
