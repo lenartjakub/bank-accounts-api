@@ -32,7 +32,7 @@ class CreateWalletTest extends WebTestCase
 
         self::$client->jsonRequest('POST', 'api/wallet', $parameters);
         $contentArray = json_decode(self::$client->getResponse()->getContent(), true);
-
+        var_dump($contentArray, self::$client->getResponse());
         $this->assertEquals(Response::HTTP_CREATED, self::$client->getResponse()->getStatusCode());
         $this->assertEquals('The wallet has been successfully created.', $contentArray['message']);
         $this->assertFalse($contentArray['error']);
