@@ -1,4 +1,4 @@
-name: "Tests"
+name: Build
 
 on:
   pull_request:
@@ -30,8 +30,5 @@ jobs:
       - name: "Install dependencies"
         run: composer install --no-interaction --no-progress
 
-      - name: "PHPUnit version"
-        run: vendor/bin/phpunit --version
-
       - name: "Run tests"
-        run: vendor/bin/phpunit ${{ env.PHPUNIT_FLAGS }}
+        run: vendor/bin/phpunit
